@@ -1,0 +1,7 @@
+.CategoryList{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  position: relative;
+  bottom: 180px;
+}
