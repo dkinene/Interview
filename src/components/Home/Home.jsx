@@ -1,43 +1,48 @@
 import React, { Component } from 'react';
 import AppContext from '../../context/AppContext';
+import withRouter from '../withRouter';
+import CartIcon from '../CartIcon';
+import Container from '../Container';
+import Header from '../Header';
 import './Home.css';
+import { capitalize } from '../../utils';
 
 class Home extends Component {
+
+    componentWillMount = () => {
+        const { params } = this.props;
+        const { category } = params;
+        if (!category) {
+            return;
+        }
+
+        this.context.handleCategoryChange(category);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { params: currentPropsParams } = this.props;
+        const { category: currentCategory } = currentPropsParams;
+        const { params: prevPropsParams } = prevProps;
+        const { category: previousCategory } = prevPropsParams;
+
+        if (previousCategory === currentCategory) {
+            return;
+        }
+
+        this.context.handleCategoryChange(currentCategory);
+    }
+
     render() {
         return (
             <AppContext.Consumer>
                 {(context) => (
                     <>
-                        <header>
-                            <div className="left-navigation">
-                                <ul>
-                                    {context.categories.map((category) => (
-                                        <li key={category.name}>
-                                            <a
-                                                href={`/#${category.name}`}
-                                                data-category={category.name}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    context.handleCategoryChange(
-                                                        e.target.getAttribute(
-                                                            'data-category'
-                                                        )
-                                                    );
-                                                }}
-                                            >
-                                                {category.name}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="right-navigation"></div>
-                        </header>
+                        <Header />
 
-                        <div className="container">
+                        <Container>
                             {context.currentCategory && (
                                 <h1>
-                                    {context.currentCategory} {context.name}
+                                    {capitalize(context.currentCategory)}
                                 </h1>
                             )}
                             <div className="products">
@@ -54,10 +59,15 @@ class Home extends Component {
                                         <p className="product-price">
                                             {context.getProductPrice(product)}
                                         </p>
+                                        <button className='add-to-cart' title={product.inStock ? 'Add to cart' : 'Out of stock'} disabled={!product.inStock} onClick={() => {
+                                            context.addToCart(product);
+                                        }}>
+                                            <CartIcon />
+                                        </button>
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        </Container>
                     </>
                 )}
             </AppContext.Consumer>
@@ -67,4 +77,4 @@ class Home extends Component {
 
 Home.contextType = AppContext;
 
-export default Home;
+export default withRouter(Home);
