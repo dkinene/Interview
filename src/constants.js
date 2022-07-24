@@ -12,6 +12,10 @@ const PRODUCTS_QUERY = `
       products{
         id
         name
+        inStock
+        gallery
+        description
+        category
         prices {
           amount
           currency {
@@ -19,10 +23,19 @@ const PRODUCTS_QUERY = `
             symbol
           }
         }
-        gallery
+        brand
       }
     }
   }
 `;
 
-export { CATEGORIES_QUERY, PRODUCTS_QUERY };
+const CURRENCIES_QUERY = `
+  query {
+    currencies {
+      label
+      symbol
+    }
+  }
+`;
+
+export { CATEGORIES_QUERY, PRODUCTS_QUERY, CURRENCIES_QUERY };
