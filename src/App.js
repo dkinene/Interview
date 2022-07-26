@@ -46,6 +46,7 @@ class App extends Component {
                             currencies,
                             cart: currentCart ? JSON.parse(currentCart): [],
                             loading: false,
+                            currentCurrency: currencies.at(0)?.symbol,
                         })
                     })
                     .catch(console.error)
@@ -84,15 +85,27 @@ class App extends Component {
         });
     }
 
-    getProductPrice = (product) => {
-        const { prices } = product;
+    updateCart = (newCart) => {
+        localStorage.setItem('cart', JSON.stringify(newCart));
+        this.setState({
+            cart: newCart,
+        });
+    }
+
+    getProductPrice = (product, includeQuantity = false) => {
+        const { prices, quantity } = product;
         const { currentCurrency } = this.state;
         let price = prices.at(0);
         if (currentCurrency) {
             price = prices.find((p) => p.currency.symbol === currentCurrency);
         }
 
-        return `${price.currency.symbol}${price.amount}`;
+        let amount = price.amount;
+        if (quantity && includeQuantity) {
+            amount *= quantity;
+        }
+
+        return `${price.currency.symbol}${Number(amount).toFixed(2)}`;
     };
 
     handleCategoryChange = (category) => {
@@ -106,7 +119,7 @@ class App extends Component {
     }
 
     render() {
-        const { cart, categories, products, currencies, loading, currentCategory } = this.state;
+        const { cart, categories, products, currencies, loading, currentCurrency, currentCategory } = this.state;
 
         if (loading) {
             return <div className='loading'>Loading...</div>;
@@ -119,8 +132,10 @@ class App extends Component {
                     categories,
                     products,
                     currencies,
+                    currentCurrency,
                     currentCategory,
                     addToCart: this.addToCart,
+                    updateCart: this.updateCart,
                     getProductPrice: this.getProductPrice,
                     handleCategoryChange: this.handleCategoryChange,
                     handleCurrencyChange: this.handleCurrencyChange,

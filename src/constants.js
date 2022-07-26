@@ -16,6 +16,16 @@ const PRODUCTS_QUERY = `
         gallery
         description
         category
+        attributes {
+          id
+          name
+          type
+          items {
+            id
+            value
+            displayValue
+          }
+        }
         prices {
           amount
           currency {
