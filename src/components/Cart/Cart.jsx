@@ -54,7 +54,7 @@ class Cart extends Component {
                                             <p>{product.name}</p>
                                             <p className='product-price'>{context.getProductPrice(product, true)}</p>
                                             <div className="product-attributes" style={{ marginBottom: '1em' }}>
-                                                {product.attributes.map((attribute) => (
+                                                {product.attributes ? product.attributes.map((attribute) => (
                                                     <div key={attribute.id} className="attribute">
                                                         <p className="attribute-name">{attribute.name}:</p>
                                                         <div className="attribute-items">
@@ -73,7 +73,7 @@ class Cart extends Component {
                                                             ))}
                                                         </div>
                                                     </div>
-                                                ))}
+                                                )): null}
                                             </div>
                                             <button onClick={() => this.decreaseProductQuantity(product)}>-</button>
                                         </div>

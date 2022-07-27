@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { Routes, Route } from 'react-router';
 import { fetchData } from './utils';
-import { CATEGORIES_QUERY, CURRENCIES_QUERY, PRODUCTS_QUERY } from './constants';
+import {
+    CATEGORIES_QUERY,
+    CURRENCIES_QUERY,
+    PRODUCTS_QUERY,
+} from './constants';
 import AppContext from './context/AppContext';
 import Home from './components/Home';
 import Cart from './components/Cart';
@@ -39,17 +43,17 @@ class App extends Component {
 
                 fetchData(CURRENCIES_QUERY)
                     .then(({ data }) => {
-                        const { data: currenciesData } = data
+                        const { data: currenciesData } = data;
                         const { currencies } = currenciesData;
 
                         this.setState({
                             currencies,
-                            cart: currentCart ? JSON.parse(currentCart): [],
+                            cart: currentCart ? JSON.parse(currentCart) : [],
                             loading: false,
                             currentCurrency: currencies.at(0)?.symbol,
-                        })
+                        });
                     })
-                    .catch(console.error)
+                    .catch(console.error);
             })
             .catch(console.error);
     };
@@ -83,14 +87,14 @@ class App extends Component {
         this.setState({
             cart,
         });
-    }
+    };
 
     updateCart = (newCart) => {
         localStorage.setItem('cart', JSON.stringify(newCart));
         this.setState({
             cart: newCart,
         });
-    }
+    };
 
     getProductPrice = (product, includeQuantity = false) => {
         const { prices, quantity } = product;
@@ -115,14 +119,23 @@ class App extends Component {
     handleCurrencyChange = (currency) => {
         this.setState({
             currentCurrency: currency,
-        })
-    }
+        });
+    };
 
     render() {
-        const { cart, categories, products, currencies, loading, currentCurrency, currentCategory } = this.state;
+        const {
+            cart,
+            categories,
+            products,
+            currencies,
+            loading,
+            currentCurrency,
+            currentCategory,
+        } = this.state;
+        console.log(cart, '||||||||>>');
 
         if (loading) {
-            return <div className='loading'>Loading...</div>;
+            return <div className="loading">Loading...</div>;
         }
 
         return (
@@ -143,8 +156,8 @@ class App extends Component {
             >
                 <div className="App">
                     <Routes>
-                        <Route exact path='/cart' element={<Cart />}/>
-                        <Route path='/:category' element={<Home />} />
+                        <Route exact path="/cart" element={<Cart />} />
+                        <Route path="/:category" element={<Home />} />
                         <Route index element={<Home />} />
                     </Routes>
                 </div>

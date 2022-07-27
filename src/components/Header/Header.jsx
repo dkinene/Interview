@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import AppContext from '../../context/AppContext';
 import { capitalize } from '../../utils';
 import CartIcon from '../CartIcon';
@@ -11,41 +11,51 @@ class Header extends Component {
             <AppContext.Consumer>
                 {(context) => (
                     <header>
-                        <div className="left-navigation">
-                            <ul>
-                                {context.categories.map((category) => (
-                                    <li key={category.name}>
-                                        <Link to={`/${category.name}`}>
-                                            {capitalize(category.name)}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        <div className="right-navigation">
-                            <select
-                                name="currencies"
-                                id="currencies"
-                                onChange={(e) => {
-                                    context.handleCurrencyChange(
-                                        e.target.value
-                                    );
-                                }}
-                            >
-                                {context.currencies.map((currency) => (
-                                    <option
-                                        key={currency.symbol}
-                                        value={currency.symbol}
-                                    >
-                                        {currency.label}
-                                    </option>
-                                ))}
-                            </select>
-
-                            <div className="cart-container">
-                                <Link to={'/cart'}>
-                                    <CartIcon /> ({context.cart.length})
-                                </Link>
+                        <div className="header">
+                            <div className="navigartion">
+                                <div className="item-container ">
+                                    {context.categories.map((category) => (
+                                        <div
+                                            key={category.name}
+                                            className="nav-item"
+                                        >
+                                            <NavLink
+                                                to={`/${category.name}`}
+                                                active
+                                            >
+                                                {capitalize(category.name)}
+                                            </NavLink>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="actions">
+                                <select
+                                    name="currencies"
+                                    id="currencies"
+                                    onChange={(e) => {
+                                        context.handleCurrencyChange(
+                                            e.target.value
+                                        );
+                                    }}
+                                >
+                                    {context.currencies.map((currency) => (
+                                        <option
+                                            key={currency.symbol}
+                                            value={currency.symbol}
+                                        >
+                                            {currency.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <div className="cart-container">
+                                    <Link to={'/cart'} replace>
+                                        <CartIcon />
+                                    </Link>
+                                </div>
+                                <div className="baloon">
+                                    {context.cart.length}
+                                </div>
                             </div>
                         </div>
                     </header>
